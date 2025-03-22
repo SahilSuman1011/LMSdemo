@@ -21,17 +21,14 @@ The Lead Management System is a comprehensive web application designed for sales
 ### Call Management
 - Simple call disposition form to update status (Connected/Not Connected)
 - Lead progress tracking (Interested/Not Interested/Admission Taken)
-- Call remarks and notes system
 
 ### Follow-up Scheduling
 - Calendar integration for scheduling callbacks
 - Date/time selection for follow-ups
-- Automated reminder system
 
 ### User Authentication
 - Secure login system with email and password
 - Role-based access control (Admin/User)
-- Password recovery functionality
 
 ### Admin Controls
 - Administrative panel for lead assignment
@@ -41,8 +38,7 @@ The Lead Management System is a comprehensive web application designed for sales
 ### UI Features
 - Fully responsive design for all device sizes
 - Light and dark mode support
-- Notification system for important updates
-- Accessible components following WCAG guidelines
+- Accessible components
 
 ## Technical Stack
 
@@ -136,28 +132,22 @@ The Lead Management System is a comprehensive web application designed for sales
 1. View all leads in the main dashboard
 2. Use filters to narrow down the lead list
 3. Click on a lead to view detailed information
-4. Use action buttons to call, schedule follow-ups, or update lead status
 
 ### Call Disposition
 1. Click the call button on a lead
 2. Update call status (Connected/Not Connected)
 3. Set lead progress (Interested/Not Interested/Admission Taken)
-4. Add remarks and schedule follow-up if needed
 
 ### Follow-up Management
 1. Navigate to the "Today's Follow-ups" tab to see scheduled follow-ups
-2. Use the calendar to schedule new follow-ups
-3. Receive notifications for upcoming follow-ups
 
 ### Notifications
 - The system provides notifications for important events
 - View notifications by clicking the bell icon in the header
-- Notifications are also displayed as toasts for immediate attention
 
 ### Theme Switching
 - Toggle between light and dark mode using the theme toggle in the header
 - The system respects your system preferences by default
-- Your theme preference is saved for future sessions
 
 ## Admin Features
 

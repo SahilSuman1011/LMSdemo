@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Phone, Eye, Calendar, MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import {
   Table,
@@ -36,7 +42,7 @@ interface LeadTableProps {
   leads: Lead[];
   onCallLead: (lead: Lead) => void;
   onViewDetails: (lead: Lead) => void;
-  onScheduleFollowUp: (lead: Lead) => void;
+  onScheduleFollowUp: (lead: Lead, date: Date) => void;
 }
 
 const LeadTable = ({
@@ -106,32 +112,81 @@ const LeadTable = ({
   onViewDetails = () => {},
   onScheduleFollowUp = () => {},
 }: LeadTableProps) => {
+  const [calendarOpen, setCalendarOpen] = useState<{ [key: string]: boolean }>(
+    {},
+  );
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+
   const getCallStatusBadge = (status: Lead["callStatus"]) => {
     switch (status) {
       case "Connected":
-        return <Badge className="bg-green-500">Connected</Badge>;
+        return (
+          <Badge
+            variant="default"
+            className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+          >
+            Connected
+          </Badge>
+        );
       case "Not Connected":
-        return <Badge className="bg-red-500">Not Connected</Badge>;
+        return <Badge variant="destructive">Not Connected</Badge>;
       default:
-        return <Badge className="bg-yellow-500">Pending</Badge>;
+        return (
+          <Badge className="bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white">
+            Pending
+          </Badge>
+        );
     }
   };
 
   const getLeadStatusBadge = (status: Lead["leadStatus"]) => {
     switch (status) {
       case "Interested":
-        return <Badge className="bg-blue-500">Interested</Badge>;
+        return (
+          <Badge
+            variant="secondary"
+            className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white dark:text-white"
+          >
+            Interested
+          </Badge>
+        );
       case "Not Interested":
-        return <Badge className="bg-gray-500">Not Interested</Badge>;
+        return (
+          <Badge variant="outline" className="bg-gray-200 dark:bg-gray-700">
+            Not Interested
+          </Badge>
+        );
       case "Admission Taken":
-        return <Badge className="bg-purple-500">Admission Taken</Badge>;
+        return (
+          <Badge className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white">
+            Admission Taken
+          </Badge>
+        );
       default:
-        return <Badge className="bg-yellow-500">New</Badge>;
+        return (
+          <Badge className="bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white">
+            New
+          </Badge>
+        );
+    }
+  };
+
+  const handleScheduleClick = (lead: Lead, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedLead(lead);
+    setCalendarOpen((prev) => ({ ...prev, [lead.id]: true }));
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (selectedLead && date) {
+      onScheduleFollowUp(selectedLead, date);
+      setCalendarOpen((prev) => ({ ...prev, [selectedLead.id]: false }));
+      setSelectedLead(null);
     }
   };
 
   return (
-    <div className="w-full bg-white rounded-md shadow">
+    <div className="w-full bg-card rounded-md shadow dark:bg-card">
       <Table>
         <TableHeader>
           <TableRow>
@@ -159,7 +214,9 @@ const LeadTable = ({
                 <TableCell>
                   <div className="flex flex-col">
                     <span>{lead.phone}</span>
-                    <span className="text-xs text-gray-500">{lead.email}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {lead.email}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell>{lead.source}</TableCell>
@@ -167,12 +224,12 @@ const LeadTable = ({
                 <TableCell>{getLeadStatusBadge(lead.leadStatus)}</TableCell>
                 <TableCell>
                   {lead.followUpDate
-                    ? format(lead.followUpDate, "MMM dd, yyyy h:mm a")
+                    ? format(new Date(lead.followUpDate), "MMM dd, yyyy")
                     : "Not scheduled"}
                 </TableCell>
                 <TableCell>
                   {lead.lastContactedDate
-                    ? format(lead.lastContactedDate, "MMM dd, yyyy")
+                    ? format(new Date(lead.lastContactedDate), "MMM dd, yyyy")
                     : "Never contacted"}
                 </TableCell>
                 <TableCell className="text-right">
@@ -193,14 +250,42 @@ const LeadTable = ({
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => onScheduleFollowUp(lead)}
-                      title="Schedule Follow-up"
+                    <Popover
+                      open={calendarOpen[lead.id] || false}
+                      onOpenChange={(open) => {
+                        if (open) {
+                          setSelectedLead(lead);
+                        }
+                        setCalendarOpen((prev) => ({
+                          ...prev,
+                          [lead.id]: open,
+                        }));
+                      }}
                     >
-                      <Calendar className="h-4 w-4" />
-                    </Button>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={(e) => handleScheduleClick(lead, e)}
+                          title="Schedule Follow-up"
+                        >
+                          <Calendar className="h-4 w-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="end">
+                        <CalendarComponent
+                          mode="single"
+                          selected={
+                            lead.followUpDate
+                              ? new Date(lead.followUpDate)
+                              : undefined
+                          }
+                          onSelect={handleDateSelect}
+                          disabled={(date) => date < new Date()}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="icon">
@@ -212,7 +297,7 @@ const LeadTable = ({
                           View Full Details
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onScheduleFollowUp(lead)}
+                          onClick={(e) => handleScheduleClick(lead, e)}
                         >
                           Schedule Follow-up
                         </DropdownMenuItem>

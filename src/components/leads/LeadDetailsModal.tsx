@@ -98,7 +98,7 @@ const LeadDetailsModal = ({
 }: LeadDetailsProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-card dark:bg-card">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
             {lead.name} - {lead.id}
@@ -108,22 +108,22 @@ const LeadDetailsModal = ({
         <div className="mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left column - Contact Information */}
-            <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+            <div className="space-y-4 bg-muted/50 p-4 rounded-lg dark:bg-muted/20">
               <h3 className="font-semibold text-lg">Contact Information</h3>
 
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-gray-500" />
+                  <Phone className="h-4 w-4 text-muted-foreground" />
                   <span>{lead.phone}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-gray-500" />
+                  <Mail className="h-4 w-4 text-muted-foreground" />
                   <span>{lead.email}</span>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-gray-500 mt-1" />
+                  <MapPin className="h-4 w-4 text-muted-foreground mt-1" />
                   <span>{lead.address}</span>
                 </div>
               </div>
@@ -132,23 +132,23 @@ const LeadDetailsModal = ({
 
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Tag className="h-4 w-4 text-gray-500" />
+                  <Tag className="h-4 w-4 text-muted-foreground" />
                   <span>Source: {lead.source}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-gray-500" />
+                  <User className="h-4 w-4 text-muted-foreground" />
                   <span>Assigned to: {lead.assignedTo}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-gray-500" />
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span>Created: {format(lead.createdAt, "MMM dd, yyyy")}</span>
                 </div>
 
                 {lead.nextFollowUp && (
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-gray-500" />
+                    <Clock className="h-4 w-4 text-muted-foreground" />
                     <span>
                       Next Follow-up:{" "}
                       {format(lead.nextFollowUp, "MMM dd, yyyy - h:mm a")}
@@ -195,11 +195,11 @@ const LeadDetailsModal = ({
                       {lead.callHistory.map((call) => (
                         <div
                           key={call.id}
-                          className="border rounded-lg p-3 bg-white"
+                          className="border rounded-lg p-3 bg-card dark:bg-card"
                         >
                           <div className="flex justify-between items-start mb-2">
                             <div>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-muted-foreground">
                                 {format(call.date, "MMM dd, yyyy - h:mm a")}
                               </p>
                               <p className="text-sm">Agent: {call.agent}</p>
@@ -234,16 +234,16 @@ const LeadDetailsModal = ({
                       ))}
                     </div>
                   ) : (
-                    <p className="text-center py-6 text-gray-500">
+                    <p className="text-center py-6 text-muted-foreground">
                       No call history available
                     </p>
                   )}
                 </TabsContent>
 
                 <TabsContent value="notes">
-                  <div className="border rounded-lg p-4 bg-white min-h-[200px]">
+                  <div className="border rounded-lg p-4 bg-card dark:bg-card min-h-[200px]">
                     <div className="flex items-start gap-2">
-                      <FileText className="h-4 w-4 text-gray-500 mt-1" />
+                      <FileText className="h-4 w-4 text-muted-foreground mt-1" />
                       <p className="text-sm">{lead.notes}</p>
                     </div>
                   </div>

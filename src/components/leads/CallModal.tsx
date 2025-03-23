@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -49,11 +49,33 @@ const CallModal = ({
 }: CallModalProps) => {
   const [callStatus, setCallStatus] = useState<string>("connected");
   const [leadProgress, setLeadProgress] = useState<string>("interested");
-  const [followUpDate, setFollowUpDate] = useState<Date>();
+  const [followUpDate, setFollowUpDate] = useState<Date | undefined>();
   const [remarks, setRemarks] = useState<string>("");
   const [calendarOpen, setCalendarOpen] = useState(false);
 
+  // Reset form when modal opens
+  useEffect(() => {
+    if (open) {
+      setCallStatus("connected");
+      setLeadProgress("interested");
+      setFollowUpDate(undefined);
+      setRemarks("");
+    }
+  }, [open]);
+
   const handleSave = () => {
+    // Validate form
+    if (!remarks) {
+      alert("Please add remarks about the call");
+      return;
+    }
+
+    // If lead is interested, follow-up date is required
+    if (leadProgress === "interested" && !followUpDate) {
+      alert("Please select a follow-up date for interested leads");
+      return;
+    }
+
     onSave({
       callStatus,
       leadProgress,
@@ -63,9 +85,17 @@ const CallModal = ({
     onOpenChange(false);
   };
 
+  // Prevent calendar from closing modal
+  const handleCalendarClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] bg-white">
+      <DialogContent
+        className="sm:max-w-[500px] bg-card dark:bg-card"
+        onClick={handleCalendarClick}
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
             <Phone className="h-5 w-5" />
@@ -119,6 +149,7 @@ const CallModal = ({
                   <Button
                     variant="outline"
                     className="w-full justify-start text-left font-normal"
+                    type="button"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {followUpDate ? (
@@ -137,6 +168,7 @@ const CallModal = ({
                       setCalendarOpen(false);
                     }}
                     initialFocus
+                    disabled={(date) => date < new Date()}
                   />
                 </PopoverContent>
               </Popover>
@@ -154,6 +186,7 @@ const CallModal = ({
               rows={4}
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
+              required
             />
           </div>
         </div>

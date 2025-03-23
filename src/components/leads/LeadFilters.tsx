@@ -57,7 +57,7 @@ const LeadFilters = ({ onFilterChange = () => {} }: LeadFiltersProps) => {
   };
 
   return (
-    <div className="w-full bg-card p-4 rounded-md shadow-sm border border-border">
+    <div className="w-full bg-card p-4 rounded-md shadow-sm border border-border dark:bg-card dark:border-border">
       <div className="flex flex-col gap-3">
         {/* Search and Toggle */}
         <div className="flex gap-3 items-center">

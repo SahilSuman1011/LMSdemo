@@ -1,4 +1,4 @@
-Lead Management System (LMS)
+ ## Lead Management System (LMS)
 
 A streamlined application for sales teams to manage leads, track calls, and update student statuses with an intuitive interface that supports the complete lead conversion workflow.
 

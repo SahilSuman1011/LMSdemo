@@ -73,9 +73,6 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 - `GET /api/leads/stats` - Get lead statistics
 - `GET /api/leads/:id` - Get a single lead by ID
 - `POST /api/leads` - Create a new lead
-- `PUT /api/leads/:id` - Update lead information
-- `POST /api/leads/:id/call` - Record a call disposition
-- `DELETE /api/leads/:id` - Delete a lead (admin only)
 
 ### Users
 
@@ -83,19 +80,10 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 - `PUT /api/users/profile` - Update user profile
 - `POST /api/users` - Register a new user (admin only)
 - `GET /api/users` - Get all users (admin only)
-- `GET /api/users/:id` - Get user by ID (admin only)
-- `PUT /api/users/:id` - Update user (admin only)
-- `DELETE /api/users/:id` - Delete user (admin only)
-- `POST /api/users/assign-leads` - Assign leads to user (admin only)
 
 ### Admin
 
 - `GET /api/admin/dashboard-stats` - Get dashboard statistics
-- `GET /api/admin/team-performance` - Get team performance
-- `GET /api/admin/unassigned-leads` - Get unassigned leads
-- `GET /api/admin/lead-sources` - Get lead source distribution
-- `GET /api/admin/conversion-by-source` - Get conversion by source
-- `GET /api/admin/monthly-trends` - Get monthly lead and conversion trends
 
 ## Setup
 
@@ -145,9 +133,6 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 - `followUpDate` - Scheduled follow-up date
 - `lastContactedDate` - Last contacted date
 - `remarks` - Additional notes
-- `assignedTo` - Reference to User
-- `createdAt` - Lead creation date
-- `updatedAt` - Last update date
 
 ### CallHistory
 
@@ -155,7 +140,6 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 - `userId` - Reference to User
 - `date` - Call date
 - `status` - Call status (Connected, Not Connected)
-- `disposition` - Call disposition (Interested, Not Interested, Admission Taken)
 - `remarks` - Call notes
 
 ## Authentication

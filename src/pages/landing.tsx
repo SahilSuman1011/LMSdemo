@@ -38,7 +38,7 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Section with Aceternity UI inspired grid background */}
+      
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-20 dark:opacity-10"></div>
         {/* Navbar */}

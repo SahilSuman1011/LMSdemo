@@ -1,34 +1,38 @@
 const mongoose = require("mongoose");
+const { Sequelize, DataTypes } = require('sequelize');
 
-const CallHistorySchema = new mongoose.Schema({
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'postgres'
+});
+
+const CallHistory = sequelize.define('CallHistory', {
   leadId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Lead",
-    required: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   date: {
-    type: Date,
-    default: Date.now,
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.NOW,
   },
   status: {
-    type: String,
-    enum: ["Connected", "Not Connected"],
-    required: true,
+    type: DataTypes.ENUM('Connected', 'Not Connected'),
+    allowNull: false,
   },
   disposition: {
-    type: String,
-    enum: ["Interested", "Not Interested", "Admission Taken", null],
-    default: null,
+    type: DataTypes.ENUM('Interested', 'Not Interested', 'Admission Taken'),
+    defaultValue: null,
   },
   remarks: {
-    type: String,
-    default: "",
+    type: DataTypes.STRING,
+    defaultValue: '',
   },
 });
+
+module.exports = CallHistory;
 
 module.exports = mongoose.model("CallHistory", CallHistorySchema);

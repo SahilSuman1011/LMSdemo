@@ -194,3 +194,252 @@ This project is licensed under the MIT License.
 3. **Follow-up Management**: Track and update follow-ups as they occur
 4. **Lead Conversion**: Update lead status to "Admission Taken" when converted
 
+# Detailed Documentation
+
+The Lead Management System (LMS) is designed to help sales teams efficiently manage potential customers (leads), track communications, and convert leads into successful admissions. Think of it as a specialized tool for sales representatives to organize their work and follow up with potential students.
+
+## What is a Lead Management System?
+
+Before diving into the technical details, let's understand what a "lead" is in a sales context:
+
+- **Lead**: A potential customer who has shown interest in your services or products but hasn't yet made a purchase or commitment
+- **Lead Management**: The process of tracking and managing interactions with leads to convert them into customers
+
+For example, in an educational institution, a lead might be someone who inquired about a course but hasn't enrolled yet.
+
+## Core Features of the LMS
+
+### 1. Dashboard View
+
+The dashboard is like the homepage for sales representatives after they log in. It shows:
+
+- A list of all the leads assigned to them
+- Search and filter options to find specific leads
+- Quick buttons to perform common actions
+
+Think of it as your command center for managing leads.
+
+### 2. Call Management
+
+When a sales representative talks to a lead, they need to record what happened during the call:
+
+- **Call Status**: Was the call connected or not?
+- **Lead Progress**: Is the lead interested, not interested, or ready to be admitted?
+- **Remarks**: Notes about what was discussed
+- **Call History**: A record of all past calls with this lead
+
+### 3. Follow-up Scheduling
+
+After talking to a lead, the representative often needs to follow up later:
+
+- They can select a specific date and time for the next call
+- Get reminders when it's time to make the follow-up call
+- See all upcoming follow-ups in one place
+
+### 4. User Authentication
+
+Not everyone should have access to all leads and features:
+
+- Users need to log in with a password
+- Different users have different permissions (regular users vs. administrators)
+
+### 5. Admin Controls
+
+Administrators (like sales managers) have special powers:
+- Add or Edit User Details
+
+## How the System is Built: Architecture
+
+The system is built using modern web technologies, organized in layers:
+
+### Frontend (What Users See and Interact With)
+
+- **React**: A popular library for building user interfaces
+- **TypeScript**: A version of JavaScript that helps catch errors before they happen
+- **Tailwind CSS**: A toolkit for designing nice-looking interfaces
+- **Shadcn UI**: Ready-made components that follow good design practices
+- **React Router**: Handles navigation between different screens
+- **React Hook Form**: Makes it easy to create and validate forms
+- **Zod**: Ensures that data is in the correct format
+
+### Backend (The "Brain" Behind the Scenes)
+
+- **Node.js**: A platform for running JavaScript outside of a web browser
+- **Express**: A framework that simplifies creating a web server
+- **PostgreSQL**: A database system for storing all the information
+
+## How Data is Organized: Database Schema
+
+All information is stored in organized tables:
+
+### Users Table
+
+Stores information about people who can log into the system:
+- Their name, email, password (securely stored)
+- Their role (admin or regular user)
+- When their account was created
+
+### Leads Table
+
+Contains details about potential customers:
+- Their name, email, phone number
+- Current status (new, interested, not interested, etc.)
+- Which sales representative is assigned to them
+- What course they're interested in
+- Where the lead came from (website, referral, etc.)
+
+### Call History Table
+
+Records every call made to a lead:
+- Which lead was called
+- Who made the call
+- Whether the call was connected
+- What was the outcome
+- Notes about the conversation
+- When the call was made
+
+### Follow-ups Table
+
+Keeps track of scheduled follow-up calls:
+- Which lead needs to be called
+- Who should make the call
+- When the call should happen
+- Any notes about what to discuss
+- Status of the follow-up (pending, completed, etc.)
+
+## Step-by-Step Workflow: How the System Works
+
+### 1. User Login Process
+
+1. A user navigates to the login page
+2. They enter their email and password
+3. The system checks if these credentials are correct:
+   - The frontend sends the login information to the backend
+   - The backend verifies the credentials with Supabase
+   - If correct, a special token (like a digital ID card) is created
+4. Based on their role, they see either:
+   - A regular dashboard
+   - An admin dashboard 
+
+### 2. Managing Leads 
+
+1. The dashboard shows all leads assigned to the representative
+2. They can:
+   - Sort and filter leads to find specific ones
+   - Click on a lead to see detailed information
+   - Click a "Call" button to record a new call
+
+### 3. Call Process
+
+1. When a representative makes a call, they follow this process:
+   - Select a lead from their list
+   - Click the "Call" button - call functionality needs to be implemented properly
+   - After the call, update the status:
+     * Was the call connected? (Yes/No)
+     * If connected, how did it go? (Interested/Not Interested/Admission Taken)
+     * Add notes about what was discussed
+   - Schedule a follow-up if needed
+
+2. Example scenario:
+   - Sarah calls John about a Web Development course
+   - John answers and is interested but wants to think about it
+   - Sarah marks the call as "Connected" and "Interested"
+   - She adds notes: "John liked the curriculum but wants to check the schedule"
+   - She schedules a follow-up for next Tuesday
+
+### 4. Follow-up Management
+
+1. When it's time for a scheduled follow-up:
+   - The representative receives a notification
+   - They can see all the previous call history
+   - They make the call and update the status again
+
+2. Example continued:
+   - Next Tuesday, Sarah gets a reminder to call John
+   - She reviews her previous notes before calling
+   - She calls John and he decides to enroll
+   - She updates the lead status to "Admission Taken"
+
+### 5. Admin Functions
+
+1. Assigning leads:
+   - The admin sees all unassigned leads
+   - They can select leads and assign them to specific representatives
+
+2. Analytics tracking:
+   - Admins can see metrics like:
+     * How many calls each representative makes
+     * Conversion rates (how many leads become customers)
+     * Average follow-up time
+   - They can use this data to coach their team
+
+## Technical Implementation: How Data Flows Through the System
+
+### 1. Authentication Flow
+
+When a user logs in:
+1. The login form collects email and password
+2. If valid, a JWT token (a secure digital ID) is created
+3. This token is stored locally on the user's browser
+
+
+### 2. Data Flow for Managing Leads
+
+When a user interacts with leads:
+1. UI components (buttons, forms) trigger functions when clicked
+2. These functions make API calls to the backend
+3. The backend processes the request and interacts with the database
+4. The database returns the requested information (although DB is not connected properly)
+5. The UI updates to show the new information
+
+### 3. Form Handling
+
+When a user fills out a form (like call disposition):
+1. React Hook Form manages what happens as the user types
+2. Zod validation ensures the data is correct
+3. Error messages appear if something is wrong
+4. When submitted, the validated data is sent to the backend
+5. The backend updates the database with the new information ( this needs to be implemented properly since db is not implemented properly right now)
+
+## Visual Workflow Diagram
+
+The system follows a logical flow of operations, from a user logging in to completing actions like making calls, scheduling follow-ups, and converting leads. This workflow ensures that all actions are tracked and the sales process is streamlined.
+
+## Getting Started with the System
+
+### For New Users
+1. Log in to access your dashboard
+2. Familiarize yourself with the lead list and filters
+3. Practice recording a call:
+   - Select a lead
+   - Click "Call"
+   - Update the status
+   - Add remarks
+   - Schedule a follow-up
+4. Check your follow-up schedule regularly
+
+### For Administrators
+
+1. After logging in, you'll see the admin dashboard
+2. Review performance metrics regularly
+3. Create new user accounts as needed
+
+## Technical Requirements
+
+To run the system, you need:
+- A modern web browser
+- Internet connection
+- Login credentials
+
+For developers wanting to modify or extend the system:
+- Node.js (v14 or higher)
+- npm or yarn package manager
+- PostgreSQL database
+- Development knowledge of React and Node.js
+
+## Conclusion
+
+The Lead Management System is designed to make the sales process more efficient and organized. By providing a clear way to track leads, calls, and follow-ups, it helps sales teams convert more leads into customers.
+
+Whether you're a sales representative using the system daily or an administrator managing your team, the LMS provides the tools you need to succeed in your role.   
+

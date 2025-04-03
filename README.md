@@ -56,34 +56,8 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 
 - **User Authentication**: JWT-based authentication with role-based access control
 - **Lead Management**: CRUD operations for leads with filtering and search capabilities
-- **Call Disposition**: Record call outcomes and lead progress
 - **Follow-up Scheduling**: Schedule and track follow-up calls
 - **Admin Dashboard**: Performance metrics and team management
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/users/login` - User login
-
-### Leads
-
-- `GET /api/leads` - Get all leads (with filtering)
-- `GET /api/leads/today-followups` - Get today's follow-ups
-- `GET /api/leads/stats` - Get lead statistics
-- `GET /api/leads/:id` - Get a single lead by ID
-- `POST /api/leads` - Create a new lead
-
-### Users
-
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
-- `POST /api/users` - Register a new user (admin only)
-- `GET /api/users` - Get all users (admin only)
-
-### Admin
-
-- `GET /api/admin/dashboard-stats` - Get dashboard statistics
 
 ## Setup
 
@@ -112,36 +86,6 @@ This is the backend API for the Lead Management System, built with Node.js, Expr
 - `JWT_SECRET` - Secret key for JWT token generation
 - `NODE_ENV` - Environment (development/production)
 
-## Database Models
-
-### User
-
-- `name` - User's full name
-- `email` - User's email (unique)
-- `password` - Hashed password
-- `role` - User role (user/admin)
-- `createdAt` - Account creation date
-
-### Lead
-
-- `name` - Lead's full name
-- `phone` - Lead's phone number
-- `email` - Lead's email
-- `source` - Lead source (Website, Referral, etc.)
-- `callStatus` - Call status (Connected, Not Connected, Pending)
-- `leadStatus` - Lead status (New, Interested, Not Interested, Admission Taken)
-- `followUpDate` - Scheduled follow-up date
-- `lastContactedDate` - Last contacted date
-- `remarks` - Additional notes
-
-### CallHistory
-
-- `leadId` - Reference to Lead
-- `userId` - Reference to User
-- `date` - Call date
-- `status` - Call status (Connected, Not Connected)
-- `remarks` - Call notes
-
 ## Authentication
 
 The API uses JWT (JSON Web Tokens) for authentication. To access protected routes, include the token in the Authorization header:
@@ -165,7 +109,7 @@ The API returns appropriate HTTP status codes and error messages in JSON format:
 This project is licensed under the MIT License.
 
 - RESTful API endpoints for CRUD operations
-- MongoDB database for data storage
+- PostgreSQL database for data storage
 - Authentication and authorization system
 - Real-time notifications for upcoming follow-ups
 
@@ -179,20 +123,12 @@ This project is licensed under the MIT License.
 ## Usage
 
 1. **Adding Leads**: Click the "Add New Lead" button to create a new lead with contact information and source
-2. **Managing Calls**: Click the phone icon to record call dispositions and schedule follow-ups
-3. **Viewing Details**: Click the eye icon to see comprehensive lead information and call history
-4. **Scheduling Follow-ups**: Use the calendar icon to set follow-up dates directly from the lead table
-5. **Filtering Leads**: Use the filter options to find specific leads by status or search term
-6. **Tracking Follow-ups**: Navigate to the Follow-ups page to see all scheduled follow-ups and their status
-7. **Call History**: Visit the Calls page to view and edit all call records
-8. **Notifications**: Check the bell icon for upcoming follow-up reminders
-
-## Workflow
-
-1. **Lead Creation**: Add a new lead with basic information
-2. **Follow-up Scheduling**: Schedule follow-ups for interested leads
-3. **Follow-up Management**: Track and update follow-ups as they occur
-4. **Lead Conversion**: Update lead status to "Admission Taken" when converted
+2. **Viewing Details**: Click the eye icon to see comprehensive lead information and call history
+3. **Scheduling Follow-ups**: Use the calendar icon to set follow-up dates directly from the lead table
+4. **Filtering Leads**: Use the filter options to find specific leads by status or search term
+5. **Tracking Follow-ups**: Navigate to the Follow-ups page to see all scheduled follow-ups and their status
+6. **Call History**: Visit the Calls page to view and edit all call records
+7. **Notifications**: Check the bell icon for upcoming follow-up reminders
 
 # Detailed Documentation
 
@@ -245,7 +181,7 @@ Not everyone should have access to all leads and features:
 
 ### 5. Admin Controls
 
-Administrators (like sales managers) have special powers:
+Administrators have special powers:
 - Add or Edit User Details
 
 ## How the System is Built: Architecture
@@ -284,26 +220,16 @@ Stores information about people who can log into the system:
 Contains details about potential customers:
 - Their name, email, phone number
 - Current status (new, interested, not interested, etc.)
-- Which sales representative is assigned to them
-- What course they're interested in
 - Where the lead came from (website, referral, etc.)
 
 ### Call History Table
-
-Records every call made to a lead:
-- Which lead was called
-- Who made the call
 - Whether the call was connected
 - What was the outcome
 - Notes about the conversation
-- When the call was made
 
 ### Follow-ups Table
 
 Keeps track of scheduled follow-up calls:
-- Which lead needs to be called
-- Who should make the call
-- When the call should happen
 - Any notes about what to discuss
 - Status of the follow-up (pending, completed, etc.)
 
@@ -361,17 +287,29 @@ Keeps track of scheduled follow-up calls:
    - She updates the lead status to "Admission Taken"
 
 ### 5. Admin Functions
-
-1. Assigning leads:
-   - The admin sees all unassigned leads
-   - They can select leads and assign them to specific representatives
-
-2. Analytics tracking:
+1. Analytics tracking:
    - Admins can see metrics like:
      * How many calls each representative makes
      * Conversion rates (how many leads become customers)
      * Average follow-up time
    - They can use this data to coach their team
+
+## Future Improvements 
+### Around leads and Calls :
+   - Admin can select leads and assign them to specific representatives
+   - The admin sees all unassigned leads
+   - Which sales representative is assigned to them
+   - What course they're interested in
+   - Which lead needs to be called 
+   - Assign Who should make the call
+   - When the call should happen
+   - When the call was made
+   - Which lead was called
+   - Who made the call
+   - Records every call made to a lead -> Call Recording Feature using Twilio or WebRTC -> Twilio is best for this!
+     
+     ![image](https://github.com/user-attachments/assets/544956cf-2de9-4a0d-9f2c-da4bfe867be2)
+  
 
 ## Technical Implementation: How Data Flows Through the System
 
@@ -401,10 +339,7 @@ When a user fills out a form (like call disposition):
 4. When submitted, the validated data is sent to the backend
 5. The backend updates the database with the new information ( this needs to be implemented properly since db is not implemented properly right now)
 
-## Visual Workflow Diagram
-
-The system follows a logical flow of operations, from a user logging in to completing actions like making calls, scheduling follow-ups, and converting leads. This workflow ensures that all actions are tracked and the sales process is streamlined.
-
+## Workflow
 ## Getting Started with the System
 
 ### For New Users
@@ -412,7 +347,7 @@ The system follows a logical flow of operations, from a user logging in to compl
 2. Familiarize yourself with the lead list and filters
 3. Practice recording a call:
    - Select a lead
-   - Click "Call"
+   - Check Status
    - Update the status
    - Add remarks
    - Schedule a follow-up

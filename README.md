@@ -23,7 +23,7 @@ A streamlined application for sales teams to manage leads, track calls, and upda
 
 ### Lead Details
 - Comprehensive lead information display
-- Call history tracking with timestamps and disposition details
+- Call history tracking 
 - Notes section for additional information
 - Edit lead status and information
 

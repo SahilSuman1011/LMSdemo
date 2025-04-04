@@ -2,6 +2,9 @@
 
 A streamlined application for sales teams to manage leads, track calls, and update student statuses with an intuitive interface that supports the complete lead conversion workflow.
 
+![image](https://github.com/user-attachments/assets/8613e07b-9c05-4ffb-a135-572b201d36cf)
+
+
 ## Features
 
 ### Dashboard View
